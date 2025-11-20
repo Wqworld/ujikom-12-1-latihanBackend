@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int         @id @default(autoincrement())
+  nama      String
+  username  String
+  password  String
+  role      Role
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  transaksi transaksi[]
+}
+
+model member {
+  id        Int         @id @default(autoincrement())
+  nama      String
+  noTelepon Int
+  status    Status
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  transaksi transaksi[]
+}
+
+model produk {
+  id              Int               @id @default(autoincrement())
+  nama            String
+  harga           Int
+  stok            Int
+  kategoriId      Int
+  gambar          String?           @default("default.jpg")
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  kategori        kategori          @relation(fields: [kategoriId], references: [id])
+  detailTransaksi detailTransaksi[]
+}
+
+model kategori {
+  id        Int      @id @default(autoincrement())
+  nama      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  produk    produk[]
+}
+
+model Diskon {
+  id        Int         @id @default(autoincrement())
+  nama      String
+  persen    Int
+  deksripsi String
+  tglMulai  DateTime
+  tglAkhir  DateTime
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  transaksi transaksi[]
+}
+
+model transaksi {
+  id              Int               @id @default(autoincrement())
+  kasirId         Int
+  diskonId        Int
+  memberId        Int
+  total           Int
+  tglTransaksi    DateTime
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  kasir           User              @relation(fields: [kasirId], references: [id])
+  diskon          Diskon            @relation(fields: [diskonId], references: [id])
+  member          member            @relation(fields: [memberId], references: [id])
+  detailTransaksi detailTransaksi[]
+}
+
+model detailTransaksi {
+  id          Int       @id @default(autoincrement())
+  transaksiId Int
+  produkId    Int
+  qty         Int
+  totalHarga  Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  transaksi   transaksi @relation(fields: [transaksiId], references: [id])
+  produk      produk    @relation(fields: [produkId], references: [id])
+}
+
+enum Status {
+  AKTIF
+  NONAKTIF
+}
+
+enum Role {
+  ADMIN
+  KASIR
+}
