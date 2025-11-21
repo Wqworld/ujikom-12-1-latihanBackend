@@ -39,7 +39,6 @@ export const register = async (req: requestUser, res: Response) => {
 
 // --- LOGIN (Untuk dapat Token) ---
 export const login = async (req: Request, res: Response) => {
-  
     const { username, password } = req.body;
 
     // 1. Cari user
