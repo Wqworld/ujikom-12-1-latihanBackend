@@ -27,7 +27,7 @@ app.use("/api/diskons", diskonRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/laporan", getLaporan);
 
-app.use("/api/uploads", express.static(path.join(__dirname, "../public/uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "../public/uploads")));
 
 // Route Test (Cuma buat ngecek server nyala)
 app.get("/", (req: Request, res: Response) => {
