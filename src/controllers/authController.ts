@@ -58,7 +58,7 @@ export const login = async (req: Request, res: Response) => {
 
     // 3. Bikin Token (Isinya ID dan Role)
     const token = jwt.sign(
-      { id: user.id, role: user.role }, 
+      { id: user.id, role: user.role, name: user.nama }, 
       JWT_SECRET as string, 
       { expiresIn: "1h" }
     );

@@ -10,6 +10,9 @@ module.exports = defineConfig({
   },
   engine: "classic",
   datasource: {
-    url: env("DATABASE_URL"),
+    db:{
+
+      url: env("DATABASE_URL"),
+    } 
   },
 });
